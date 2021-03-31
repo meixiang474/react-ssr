@@ -1,5 +1,6 @@
 const webpack = require("webpack");
 const path = require("path");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
   devtool: "eval-cheap-module-source-map",
@@ -61,12 +62,56 @@ module.exports = {
           },
         ],
       },
+      {
+        test: /\.css$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          {
+            loader: "css-loader",
+            options: {
+              modules: true,
+            },
+          },
+          "postcss-loader",
+        ],
+      },
+      {
+        test: /\.scss$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          {
+            loader: "css-loader",
+            options: {
+              modules: true,
+            },
+          },
+          "postcss-loader",
+          "sass-loader",
+        ],
+      },
+      {
+        test: /\.less$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          {
+            loader: "css-loader",
+            options: {
+              modules: true,
+            },
+          },
+          "postcss-loader",
+          "less-loader",
+        ],
+      },
     ],
   },
   plugins: [
     new webpack.ProgressPlugin(),
     new webpack.ProvidePlugin({
       React: "react",
+    }),
+    new MiniCssExtractPlugin({
+      filename: "index.css",
     }),
     new webpack.DefinePlugin({
       SSR: false,

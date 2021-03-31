@@ -4,7 +4,7 @@ import path from "path";
 import { matchRoutes } from "react-router-config";
 import routes from "../routes";
 import render from "./utils";
-import { getServerStore } from "@/store";
+import { getServerStore, ServerStore } from "@/store";
 import { HOST } from "@/api";
 
 const app = express();
@@ -27,16 +27,23 @@ if (SSR) {
 
     const matchedRoutes = matchRoutes(routes, req.path);
 
-    const promises: Promise<void>[] = [];
+    const promises: Promise<any>[] = [];
 
     matchedRoutes.forEach((item) => {
       if (item.route.loadData) {
-        promises.push(item.route.loadData(store));
+        const promise = new Promise((resolve, reject) => {
+          (item.route.loadData as (store: ServerStore) => Promise<void>)(
+            store
+          ).then(resolve, resolve);
+        });
+        promises.push(promise);
       }
     });
 
+    const context = {};
+
     await Promise.all(promises);
-    render(store, routes, req, res);
+    render(store, routes, context, req, res);
   });
 }
 

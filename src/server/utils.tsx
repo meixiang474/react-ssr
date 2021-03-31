@@ -5,32 +5,47 @@ import { Provider } from "react-redux";
 import { renderRoutes } from "react-router-config";
 import { ServerStore } from "@/store";
 import { NewRouteConfig } from "@/routes";
+import fs from "fs";
+import path from "path";
 
-const render = (
+const whiteList = ["/login", "/", "/profile"];
+
+const render = async (
   store: ServerStore,
   routes: NewRouteConfig[],
+  context: Record<string, any>,
   req: Request,
   res: Response
 ) => {
-  const content = renderToNodeStream(
+  const stream = renderToNodeStream(
     <div id="root">
       <Provider store={store}>
-        <Router context={{}} location={req.path}>
+        <Router context={context} location={req.path}>
           <Switch>{renderRoutes(routes)}</Switch>
         </Router>
       </Provider>
     </div>
   );
+  const styles = await fs.promises.readFile(
+    path.join(__dirname, "index.css"),
+    "utf-8"
+  );
+  if (!whiteList.includes(req.path)) {
+    res.status(404);
+  }
   res.setHeader("Content-Type", "text/html; charset=utf-8");
   res.write(`
     <html>
       <head>
         <title>ssr</title>
+        <style>
+          ${styles}
+        </style>
       </head>
       <body>
   `);
-  content.pipe(res, { end: false });
-  content.on("end", () => {
+  stream.pipe(res, { end: false });
+  stream.on("end", () => {
     res.write(`
         <script>
           window.context = {

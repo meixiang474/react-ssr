@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { NewDispatch, RootState, ServerStore } from "@/store";
 import * as actions from "@/store/actions/home";
 import image from "@/assets/images/girl.jpeg";
+import styles from "./style.less";
 
 const Home = () => {
   const { name, newsList } = useSelector<RootState, RootState["home"]>(
@@ -14,10 +15,9 @@ const Home = () => {
       dispatch(actions.getHomeList());
     }
   }, [dispatch, newsList.length]);
-
   return (
     <>
-      <div>this i {name}</div>
+      <div className={styles.name}>this is {name}</div>
       {newsList.map((news) => {
         return <div key={news.id}>{news.title}</div>;
       })}

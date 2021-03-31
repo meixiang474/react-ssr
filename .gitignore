@@ -1,7 +1,7 @@
-node_modules/
-public/
-build/
-assets/
-.vscode/
+node_modules
+public
+build
+/assets
+.vscode
 package-lock.json
 .DS_Store

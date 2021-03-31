@@ -4,6 +4,7 @@ import App from "./containers/App";
 import Home from "./containers/Home";
 import Login from "./containers/Login";
 import Profile from "./containers/Profile";
+import NotFound from "./containers/NotFound";
 
 export interface NewRouteConfig extends RouteConfig {
   loadData?: (store: ServerStore) => Promise<void>;
@@ -32,6 +33,10 @@ const routes: NewRouteConfig[] = [
         key: "profile",
         path: "/profile",
         component: Profile,
+      },
+      {
+        key: "notFound",
+        component: NotFound,
       },
     ],
   },

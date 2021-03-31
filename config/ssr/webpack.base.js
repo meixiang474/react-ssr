@@ -1,4 +1,5 @@
 const webpack = require("webpack");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const path = require("path");
 
 module.exports = {
@@ -63,10 +64,54 @@ module.exports = {
           },
         ],
       },
+      {
+        test: /\.css$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          {
+            loader: "css-loader",
+            options: {
+              modules: true,
+            },
+          },
+          "postcss-loader",
+        ],
+      },
+      {
+        test: /\.scss$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          {
+            loader: "css-loader",
+            options: {
+              modules: true,
+            },
+          },
+          "postcss-loader",
+          "sass-loader",
+        ],
+      },
+      {
+        test: /\.less$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          {
+            loader: "css-loader",
+            options: {
+              modules: true,
+            },
+          },
+          "postcss-loader",
+          "less-loader",
+        ],
+      },
     ],
   },
   plugins: [
     new webpack.ProgressPlugin(),
+    new MiniCssExtractPlugin({
+      filename: "index.css",
+    }),
     new webpack.ProvidePlugin({
       React: "react",
     }),
