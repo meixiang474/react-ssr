@@ -38,9 +38,7 @@ const render = async (
     <html>
       <head>
         <title>ssr</title>
-        <style>
-          ${styles}
-        </style>
+        <style>${styles}</style>
       </head>
       <body>
   `);
